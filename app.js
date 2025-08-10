@@ -1,81 +1,80 @@
 // El principal objetivo de este desafío es fortalecer tus habilidades en lógica de programación. Aquí deberás desarrollar la lógica para resolver el problema.
-let listaAmigos =[];
-let resultadoLista = [];
-let lista = [];
-let amigoSecreto = "";
-let i =0;
+let listaAmigos = [];
 
-function agregarAmigo(){
-listaAmigos.push(document.getElementById("amigo").value);
-if(listaAmigos[i] === ''|| listaAmigos[i] === ' '){
-alert("Error!!, No ingresó nombre. Favor intente nuevamente");
-listaAmigos.pop();
-} else{
-  let nombre = document.querySelector('ul');
-  nombre.innerHTML = listaAmigos[i];
-  //amigoSecreto = listaAmigos[i];
-  //console.log(amigoSecreto);
-  console.log(i);
-  console.log(listaAmigos.length);
-  i++;
-if (i>1){
-  amigoSecreto = listaAmigos[i];
-  for (let i=1; i <= listaAmigos.length; i++ ){
-     if (amigoSecreto === listaAmigos[i-1]) {
-      console.log(amigoSecreto);
-      console.log(listaAmigos[i]);
-      alert('ERROR, El nombre ya esta en la lista');
-    listaAmigos.pop();
-  }
-}
-}
-}
-console.log(listaAmigos);
-clearBox();
-return;
-}
+function agregarAmigo() {
+  const input = document.getElementById("amigo");
+  const nombre = input.value.trim();
 
-function clearBox(){
-    let valorBox = document.getElementById("amigo");
-        valorBox.value = '';
+  if (nombre === "") {
+    alert("⚠️ Error: No ingresaste ningún nombre... Intenta nuevamente.");
     return;
-}
-
-function sortearAmigo(){    
-    console.log("Juego Interrumpido");
-    //console.log(listaAmigos);
-    let x = desordenarLista(listaAmigos);
-    console.log(x);
-    return;
-}
-
-function verificacionNoTocarteATiMismo(amigoIngresado, amigoSorteado){
-  let resultado = document.getElementById("amigo");
-  for (i = 0; i <= listaAmigos.length  ; i++ ){
-      desordenarLista(listaAmigos);
-      console.log(resultado);
-      console.log(listaAmigos)
-      resultadoLista.innerHTML = listaAmigos[i];
-    }
-}
-
-function desordenarLista(listaAmigos) {
-  // Crear una copia de la lista para no modificar la original
-  let lista = listaAmigos;
-  let currentIndex = lista.length;
-  let randomIndex;
-
-  // Mientras queden elementos por desordenar
-  while (currentIndex != 0) {
-    // Escoger un elemento restante aleatorio
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // Intercambiar el elemento actual con el elemento aleatorio
-    [lista[currentIndex], lista[randomIndex]] = [
-      lista[randomIndex],
-      lista[currentIndex],
-    ];
   }
-  return;
+
+  if (listaAmigos.includes(nombre)) {
+    alert("⚠️ Error: Este nombre ya fue añadido.");
+    return;
+  }
+
+  listaAmigos.push(nombre);
+  mostrarLista();
+  input.value = "";
+  console.log("Lista actual:", listaAmigos);
+}
+
+function mostrarLista() {
+  const ul = document.querySelector("ul");
+  ul.innerHTML = ""; // Limpiar lista anterior
+
+  listaAmigos.forEach((amigo) => {
+    const li = document.createElement("li");
+    li.textContent = amigo;
+    ul.appendChild(li);
+  });
+}
+
+function sortearAmigo() {
+  if (listaAmigos.length < 2) {
+    alert("⚠️ Debes ingresar al menos dos amigos para sortear.");
+    return;
+  }
+
+  let asignaciones = generarAsignaciones(listaAmigos);
+  console.log("Asignaciones:", asignaciones);
+  mostrarAsignaciones(asignaciones);
+}
+
+function generarAsignaciones(lista) {
+  let asignado = [...lista];
+  let valido = false;
+
+  while (!valido) {
+    asignado = desordenarLista([...lista]);
+    valido = lista.every((amigo, i) => amigo !== asignado[i]);
+  }
+
+  let resultado = {};
+  lista.forEach((amigo, i) => {
+    resultado[amigo] = asignado[i];
+  });
+
+  return resultado;
+}
+
+function desordenarLista(lista) {
+  for (let i = lista.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [lista[i], lista[j]] = [lista[j], lista[i]];
+  }
+  return lista;
+}
+
+function mostrarAsignaciones(asignaciones) {
+  const ul = document.querySelector("ul");
+  ul.innerHTML = ""; // Limpiar lista anterior
+
+  for (let [amigo, asignado] of Object.entries(asignaciones)) {
+    const li = document.createElement("li");
+    li.textContent = `${amigo} → ${asignado}`;
+    ul.appendChild(li);
+  }
 }
