@@ -1,6 +1,7 @@
 # Desafio-Amigo-Secreto
 Este es un programa interactivo para organizar un sorteo de Amigo Secreto de forma sencilla y divertida.
 Permite ingresar participantes, validar entradas y realizar el sorteo asegurando que nadie se asigne a sí mismo.
+
 🧩 Funcionalidades
 - Ingreso de participantes:
 Los usuarios pueden escribir nombres en una casilla de texto y añadirlos a la lista de participantes presionando el botón "Añadir".
